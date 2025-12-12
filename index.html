@@ -1,10 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <title>내 웹사이트</title>
+    <meta charset="UTF-8">
+    <title>호리미의 자바공부</title>
+    <style>
+
+        body { font-family: 'Malgun Gothic', sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+        h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h2 { color: #e67e22; margin-top: 30px; }
+        .code-box { background-color: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; border: 1px solid #ddd; }
+        code { font-family: 'Consolas', monospace; color: #d63384; }
+        .explanation { background-color: #e8f8f5; padding: 15px; border-radius: 5px; border-left: 5px solid #1abc9c; }
+    </style>
 </head>
 <body>
-    <h1>안녕하세요!</h1>
-    <p>호리미 블로그에 오신 것을 환영합니다.</p>
+
+    <h1> Java Swing(Week 13)</h1>
+    <p>자바 GUI <strong>체크박스</strong>와 이벤트 처리</p>
+    <p>과일(사과, 배, 체리)을 체크박스로 선택하면, <strong>실시간으로 총 가격을 계산</strong>해주는 프로그램..다음에 수량도 체크해보겠음!!</p>
+    
+    <div class="explanation">
+        <ul>
+            <li><strong>컴포넌트 배열 사용:</strong> <code>JCheckBox[]</code> 배열을 사용</li>
+            <li><strong>ItemListener:</strong> 액션이아니라 itemstate감지.</li>
+        </ul>
+    </div>
+
+    <h2> (_1211.java)</h2>
+    <div class="code-box">
+<pre>
+package week13;
+
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
+
+public class _1211 extends JFrame {
+    private JCheckBox[] fruits = new JCheckBox[3];
+    private String[] names = {"사과", "배", "체리"};
+    private int[] prices = {100, 500, 2000};
+    
+    private JLabel sumLabel;
+
+    public _1211() {
+        setTitle("체크박스, ItemEvent 예제");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+        
+        Container c = getContentPane();
+        c.setLayout(new FlowLayout());
+        
+        c.add(new JLabel("사과: 100원, 배: 500원, 체리: 2000원"));
+        Myitemlistener listener = new Myitemlistener();
+        
+        for(int i = 0; i < fruits.length; i++) {
+            fruits[i] = new JCheckBox(names[i]); 
+            fruits[i].setBorderPainted(true); 
+            c.add(fruits[i]);
+            fruits[i].addItemListener(listener); 
+        }
+
+        sumLabel = new JLabel("현재 합계: 0원");
+        c.add(sumLabel);
+        
+        setSize(300, 150);
+        setVisible(true);
+    }
+    class Myitemlistener implements ItemListener {
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+            int sum = 0;
+            for (int i = 0; i < fruits.length; i++) {
+                if (fruits[i].isSelected()) {
+                    sum += prices[i];
+                }
+            }
+            sumLabel.setText("현재 합계: " + sum + "원");
+        }
+    }
+    
+    public static void main(String[] args) {
+        new _1211();
+    }
+}
+</pre>
+    </div>
+
 </body>
 </html>
